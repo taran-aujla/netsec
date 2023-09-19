@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main() {
+  cout<<"Enter the message"<<endl;
+  char msg[100];
+  int key;
+  cin.getline(msg,100);
+  cout<<"Enter the key: ";
+  cin>>key;
+
+  //Encryption
+  for(int i=0; msg[i]!='\0';i++){
+    
+    if (msg[i] >= 'a' && msg[i] <= 'z'){
+      msg[i] = msg[i] + key;
+      if (msg[i] > 'z') {
+         msg[i] = msg[i] - 'z' + 'a' - 1;
+      }  
+   }
+      
+   else if (msg[i] >= 'A' && msg[i] <= 'Z'){
+      msg[i] = msg[i] + key;
+      if (msg[i] > 'Z'){
+         msg[i] = msg[i] - 'Z' + 'A' - 1;
+      }
+   }
+    
+  }
+  cout<<msg<<endl;
+
+  //Decryption
+  for(int i=0; msg[i]!='\0';i++){
+    
+    if (msg[i] >= 'a' && msg[i] <= 'z'){
+      msg[i] = msg[i] - key;
+      if (msg[i] < 'a') {
+         msg[i] = msg[i] + 'z' - 'a' + 1;
+      }  
+   }
+      
+   else if (msg[i] >= 'A' && msg[i] <= 'Z'){
+      msg[i] = msg[i] - key;
+      if (msg[i] < 'A'){
+         msg[i] = msg[i] + 'Z' - 'A' + 1;
+      }
+   }
+    
+  }
+  cout<<msg<<endl;
+  
