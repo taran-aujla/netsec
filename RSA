@@ -1,0 +1,40 @@
+clc
+clear
+
+%initial values
+Plaintext = input("Input the Plaintext --> ","s")
+P = 11;
+Q = 17;
+fprintf('Selected values of P and Q are %d and %d \n',P,Q);
+n = P*Q;
+phi_n = (P-1)*(Q-1);
+F = true;
+Public_key_part = 2;
+
+% Public key
+while(F)
+    if gcd(Public_key_part,phi_n) == 1 && Public_key_part<phi_n
+        F = false;
+    else
+        Public_key_part = Public_key_part + 1;
+    end
+end
+
+%private Key
+Private_Key_part = inversemodulo(Public_key_part,phi_n);
+
+fprintf('Public key is (n = %d, e = %d)\n',n,Public_key_part)
+fprintf('Private key is (n = %d, d = %d)\n',n,Private_Key_part)
+
+%Encryption
+for i = 1:length(Plaintext)
+    Ciphertext(i) = exp_modulo(double(Plaintext(i)),Public_key_part,n);
+end
+fprintf('Generated Ciphertext is ');
+char(Ciphertext)
+
+%decryption
+for i = 1:length(Ciphertext)
+    new_Plaintext(i) = char(exp_modulo(Ciphertext(i),Private_Key_part,n));
+end
+fprintf('Recovered plaintext is --> %s\n',new_Plaintext);
