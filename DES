@@ -1,0 +1,59 @@
+clear 
+clc
+% Plaintext
+Plaintext = input('Enter the plain text --> ','s');
+if mod(length(Plaintext),2) ~= 0
+    Plaintext = append(Plaintext,'1')
+end
+
+% Key
+fprintf('Enter %d letter key --> ',length(Plaintext)/2);
+key = input('',"s")
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Encrypting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Seperating into left and right
+left_part = Plaintext(1:length(Plaintext)/2);
+left_part = double(left_part);
+right_part = Plaintext(length(Plaintext)/2 + 1:length(Plaintext));
+right_part = double(right_part);
+
+% feistel implemetation
+for i=1:16
+    % Round starts
+    sub_part = right_part;
+    right_part = bitor(double(key),right_part);
+    right_part = bitxor(right_part,left_part);
+    left_part = sub_part;
+    key = char(key) + 1;
+end
+
+%final shifting
+subpart = left_part;
+left_part = char(right_part);
+right_part = char(subpart);
+ciphertext = append(left_part,right_part);
+fprintf('Obtained ciphertext is --> %s\n',dec2hex(ciphertext))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Decrypting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+left_part = ciphertext(1:length(ciphertext)/2);
+left_part = double(left_part);
+right_part = ciphertext(length(ciphertext)/2 + 1:length(ciphertext));
+right_part = double(right_part);
+
+% feistel implemetation
+for i=1:16
+    % Round starts
+    key = char(key) - 1;
+    sub_part = right_part;
+    right_part = bitor(double(key),right_part);
+    right_part = bitxor(right_part,left_part);
+    left_part = sub_part;
+end
+
+subpart = left_part;
+left_part = char(right_part);
+right_part = char(subpart);
+plaintext1 = append(left_part,right_part)
+fprintf('Recovered plaintext is --> %s\n',plaintext1)
