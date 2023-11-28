@@ -1,0 +1,24 @@
+clc
+clear
+
+Message = input('Enter Message --> ','s');
+Original = Message;
+fprintf('Given message is --> %s\n',Message);
+Message = dec2bin(Message);
+Message = reshape(Message',1,[]);
+hashcode = [];
+for i=1:6:length(Message)
+    hashcode = [hashcode Message(i)];
+end
+
+if length(hashcode)<32
+    hashcode = hashcode(1:end);
+else
+    hashcode = hashcode(1:32);
+end
+hashcode = bin2dec(hashcode);
+hashcode = dec2hex(hashcode,8);
+
+fprintf('Generated Hash Code is --> %s\n',hashcode);
+final_message = append(Original,hashcode);
+fprintf('Final message is --> %s\n',final_message);
