@@ -1,0 +1,46 @@
+clc
+clear
+
+Message = input('Enter Message --> ','s');
+fprintf('Enter key --> ');
+Key = input('','s');
+f = true;
+while(f)
+if mod(length(Message),length(Key)) ~= 0
+    Message = append(Message,'X');
+else
+    f = false
+end
+end
+original = Message;
+
+Message = reshape(Message,length(Key),[])';
+maccode = [];
+
+for i=1:size(Message,1)
+    for j=1:size(Message,2)
+        maccode(i,j) = bitxor(double(Message(i,j)),double(Key(j)));
+    end
+end
+maccode = char(reshape(maccode',1,[]));
+final_message = [original maccode]
+
+% authentication 
+recovered_message = final_message(1:length(original))
+recovered_message = reshape(recovered_message,length(Key),[])';
+recovered_maccode = final_message(length(original)+1:end)
+
+for i=1:size(Message,1)
+    for j=1:size(Message,2)
+        verification_maccode(i,j) = bitxor(double(recovered_message(i,j)),double(Key(j)));
+    end
+end
+verification_maccode = dec2hex(reshape(verification_maccode',1,[]))
+
+for i=1:length(verification_maccode)
+    if verification_maccode(i) ~= recovered_maccode(i)
+        fprintf('Not authenticated\n')
+    elseif verification_maccode(i) == recovered_maccode(i) && i==length(verification_maccode)
+        fprintf('Autheticated message\n')
+    end
+end
