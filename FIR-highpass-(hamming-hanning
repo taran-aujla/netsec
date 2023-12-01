@@ -1,0 +1,37 @@
+% Experiment 7(a)
+clear all;
+clc;
+
+wp = 0.51 * pi; % Pass band edge frequency
+ws = 0.37 * pi; % Stop band edge frequency
+tr_width = abs(ws - wp); % Transition width
+wc = (wp + ws) / 2; % Cutoff frequency
+
+M = ceil(6.2 * pi / tr_width) + 1; % Length of window
+if(rem(M, 2) == 0)
+    M = M + 1;
+end
+n = (-(M - 1) / 2) : ((M - 1) / 2);
+
+w_n = hann(M); % Hanning Window
+fc = wc / (2 * pi);
+
+hd = -2 * fc * sinc(2 * fc * n); % Ideal impulse response of high pass filter
+h = hd .* w_n'; % Multiplication of ideal impulse response with window function
+[HW, WW] = freqz(h, 1); % Magnitude and Phase response of high pass filter
+
+subplot(2, 1, 1);
+stem(n, w_n);
+title('Hanning Window Function');
+xlabel('n');
+ylabel('W(n)');
+legend('101915008');
+grid on;
+
+subplot(2, 1, 2);
+plot(WW ./ pi, abs(HW));
+title('High Pass Filter using Hanning Window Function');
+xlabel('Normalized Frequency (\omega / \pi)');
+ylabel('Magnitude Response of HPF |H(\omega)|');
+legend('101915008');
+grid on;
