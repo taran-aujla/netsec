@@ -1,0 +1,57 @@
+%RECTANGULAR
+clc;
+clear all;
+wp=0.5*pi;
+ws=0.75*pi;
+tr_width=abs(ws-wp);
+wc=(wp+ws)/2;
+M=ceil(6.1*pi/tr_width)+1;
+w_n=(rectwin(M));
+n=-(M-1)/2:(M-1)/2;
+fc=wc/(2*pi);
+hd=2*fc*(sinc(2*fc*n));
+h=hd.*w_n';
+[HW,WW]=freqz(h,1);
+
+subplot(2,1,1);
+stem(n,w_n);
+xlabel('n');
+ylabel('W[n]');
+title('window function ');
+
+subplot(2,1,2);
+plot(WW./pi,abs(HW));
+xlabel('normalized frequency');
+ylabel('magnitude response of lpf');
+title('window function ');
+
+
+
+
+%TRIANGULAR
+
+% clc;
+% clear all;
+% wp=0.5*pi;
+% ws=0.75*pi;
+% tr_width=abs(ws-wp);
+% wc=(wp+ws)/2;
+% M=ceil(6.1*pi/tr_width)+1;
+% w_n=(triang(M));
+% n=-(M-1)/2:(M-1)/2;
+% fc=wc/(2*pi);
+% hd=2*fc*(sinc(2*fc*n));
+% h=hd.*w_n';
+% [HW,WW]=freqz(h,1);
+% 
+% subplot(2,1,1);
+% stem(n,w_n);
+% xlabel('n');
+% ylabel('W[n]');
+% title('window function ');
+% 
+% subplot(2,1,2);
+% stem(WW./pi,abs(HW));
+% xlabel('normalized frequency');
+% ylabel('magnitude response of lpf');
+% title('window function ');
