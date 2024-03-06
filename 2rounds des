@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Function to perform one round of encryption
+void encryptRound(string& left, string& right, const int key) {
+    string new_left = right;
+    string new_right = "";
+    for (int i = 0; i < right.size(); ++i) {
+        new_right += right[i] + key;
+    }
+    left = new_left;
+    right = new_right;
+}
+
+// Function to perform one round of decryption
+void decryptRound(string& left, string& right, const int key) {
+    string new_left = "";
+    string new_right = left;
+    for (int i = 0; i < left.size(); ++i) {
+        new_left += left[i] - key;
+    }
+    left = new_left;
+    right = new_right;
+}
+
+// Function to encrypt the text for two rounds
+string encrypt(string text, const int key) {
+    string left = text.substr(0, text.size() / 2);
+    string right = text.substr(text.size() / 2);
+    
+    encryptRound(left, right, key);
+    encryptRound(left, right, key);
+
+    return left + right;
+}
+
+// Function to decrypt the text for two rounds
+string decrypt(string text, const int key) {
+    string left = text.substr(0, text.size() / 2);
+    string right = text.substr(text.size() / 2);
+    
+    decryptRound(left, right, key);
+    decryptRound(left, right, key);
+
+    return left + right;
+}
+
+int main() {
+    string text = "taranSingh";
+    const int key = 1;
+
+    // Encryption
+    string encrypted_text = encrypt(text, key);
+    cout << "Encrypted text: " << encrypted_text << endl;
+
+    // Decryption
+    string decrypted_text = decrypt(encrypted_text, key);
+    cout << "Decrypted text: " << decrypted_text << endl;
+
+    return 0;
+}
